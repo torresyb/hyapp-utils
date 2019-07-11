@@ -1,0 +1,39 @@
+{
+  "name": "hyapp-utils",
+  "version": "2.0.2",
+  "description": "'hyapp utils'",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/torresyb/hyapp-utils.git"
+  },
+  "keywords": [
+    "'hyapp-cli'"
+  ],
+  "author": "yangb@2345.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/torresyb/hyapp-utils/issues"
+  },
+  "homepage": "https://github.com/torresyb/hyapp-utils#readme",
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "eslint": "^5.8.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "eslint-plugin-vue": "^4.5.0",
+    "lodash": "^4.17.10"
+  }
+}

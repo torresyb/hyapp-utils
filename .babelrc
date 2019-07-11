@@ -1,0 +1,14 @@
+{
+    "presets": [
+        ["env", {
+            "loose": false,
+            "spec": true,
+            "targets": {
+                "browsers": ["> 1%", "last 20 versions", "not ie <= 8"]
+            },
+            "useBuiltIns": "usage",
+            "debug": false
+        }],
+        "stage-3"
+    ]
+}
