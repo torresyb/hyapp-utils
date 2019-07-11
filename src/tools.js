@@ -1,14 +1,15 @@
-import isNaN from 'lodash/isNaN'
-import isNumber from 'lodash/isNumber'
-import isBoolean from 'lodash/isBoolean'
-import isEmpty from 'lodash/isEmpty'
-import startsWith from 'lodash/startsWith'
+// import isNaN from 'lodash/isNaN'
+// import isNumber from 'lodash/isNumber'
+// import isBoolean from 'lodash/isBoolean'
+// import isEmpty from 'lodash/isEmpty'
+// import startsWith from 'lodash/startsWith'
+import lodash from 'lodash'
 import os from './browser'
-import {appGetInvoked, appInvoked, needRefreshData} from './jsbridge'
+import { appGetInvoked, appInvoked, needRefreshData } from './jsbridge'
 
 var Tools = Object.create(null)
 
-Tools.install = function (Vue) {
+Tools.install = function(Vue) {
   Vue.prototype.$tools = {
     /**
      * 非空判断
@@ -16,12 +17,12 @@ Tools.install = function (Vue) {
      * @returns {boolean}
      */
     isNotEmpty: function(arg) {
-      if (!isNaN(arg) && isNumber(arg)) {
+      if (!lodash.isNaN(arg) && lodash.isNumber(arg)) {
         return true
-      } else if (isBoolean(arg)) {
+      } else if (lodash.isBoolean(arg)) {
         return true
       }
-      return !isEmpty(arg)
+      return !lodash.isEmpty(arg)
     },
     /**
      * object 转 URL 参数
@@ -36,7 +37,7 @@ Tools.install = function (Vue) {
       for (var key in obj) {
         if (obj[key] !== null) {
           var val = encode ? encodeURIComponent(obj[key]) : obj[key]
-          url += (key + '=' + val + '&')
+          url += key + '=' + val + '&'
         }
       }
       return url.substring(0, url.lastIndexOf('&'))
@@ -56,8 +57,8 @@ Tools.install = function (Vue) {
      * @return {String}           显示的图片
      */
     getBase64: function(base64Str) {
-      if (isEmpty(base64Str)) return base64Str
-      if (!startsWith(base64Str, 'http://') && !startsWith(base64Str, 'https://')) {
+      if (lodash.isEmpty(base64Str)) return base64Str
+      if (!lodash.startsWith(base64Str, 'http://') && !lodash.startsWith(base64Str, 'https://')) {
         base64Str = 'data:image/jpeg;base64,' + base64Str
       }
       return base64Str
@@ -75,5 +76,8 @@ Tools.install = function (Vue) {
   Vue.prototype.$appGetInvoked = appGetInvoked
   // 刷新机制
   Vue.prototype.$needRefreshData = needRefreshData
+
+  // 暴露lodash
+  Vue.prototype.$lodash = lodash
 }
 export default Tools
