@@ -2,7 +2,7 @@ import os from './browser'
 var isIos = os === 'iOS'
 var isAndroid = os === 'android'
 // 这段代码是固定的，必须要放到js中
-function setupWebViewJavascriptBridge(callback) {
+export function setupWebViewJavascriptBridge(callback) {
   // console.log(`>>>>>>os: ${os}, setupWebViewJavascriptBridge`)
   // Android
   if (isAndroid) {
@@ -91,25 +91,6 @@ export function appGetInvoked(name, cb) {
     console.log('请在APP内调用' + name)
   }
 }
-
-setupWebViewJavascriptBridge(function(bridge) {
-  appInvoked('appWVJBCompleted', { completed: true })
-  var appGetAjaxHeaderSdk = function() {
-    bridge.registerHandler('webViewWillDisappear', function() {})
-
-    bridge.registerHandler('webViewWillAppear', function() {
-      var appAwake = localStorage.getItem('kAppEnterForegroundTime')
-      if (needRefreshData(appAwake)) {
-        window.location.reload()
-      }
-      var timestamp = new Date().getTime()
-      localStorage.setItem('kAppEnterForegroundTime', timestamp)
-    })
-  }
-  appGetAjaxHeaderSdk(function(data) {
-    console.log(data)
-  })
-})
 
 export function needRefreshData(lasttime) {
   if (!lasttime || lasttime === '') {
