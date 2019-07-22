@@ -78,7 +78,7 @@ Tools.install = function(Vue) {
   Vue.prototype.$needRefreshData = needRefreshData
 
   // 暴露lodash
-  Vue.prototype.$lodash = lodash
+  window.$lodash = lodash
 
   window.setupWebViewJavascriptBridge = setupWebViewJavascriptBridge
 }
