@@ -1,6 +1,6 @@
 {
   "name": "hyapp-utils",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "'hyapp utils'",
   "main": "index.js",
   "scripts": {

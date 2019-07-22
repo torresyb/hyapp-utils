@@ -80,24 +80,6 @@ Tools.install = function(Vue) {
   // 暴露lodash
   Vue.prototype.$lodash = lodash
 
-  // 自动初始化jsBridge
-  setupWebViewJavascriptBridge(function(bridge) {
-    appInvoked('appWVJBCompleted', { completed: true })
-    var appGetAjaxHeaderSdk = function() {
-      bridge.registerHandler('webViewWillDisappear', function() {})
-
-      bridge.registerHandler('webViewWillAppear', function() {
-        var appAwake = localStorage.getItem('kAppEnterForegroundTime')
-        if (needRefreshData(appAwake)) {
-          window.location.reload()
-        }
-        var timestamp = new Date().getTime()
-        localStorage.setItem('kAppEnterForegroundTime', timestamp)
-      })
-    }
-    appGetAjaxHeaderSdk(function(data) {
-      console.log(data)
-    })
-  })
+  window.setupWebViewJavascriptBridge = setupWebViewJavascriptBridge
 }
 export default Tools
