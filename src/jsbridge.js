@@ -2,7 +2,7 @@ import os from './browser'
 var isIos = os === 'iOS'
 var isAndroid = os === 'android'
 // 这段代码是固定的，必须要放到js中
-export function setupWebViewJavascriptBridge(callback) {
+export function setupWebViewJavascriptBridge (callback) {
   // console.log(`>>>>>>os: ${os}, setupWebViewJavascriptBridge`)
   // Android
   if (isAndroid) {
@@ -11,7 +11,7 @@ export function setupWebViewJavascriptBridge(callback) {
     } else {
       document.addEventListener(
         'WebViewJavascriptBridgeReady',
-        function() {
+        function () {
           callback(window.WebViewJavascriptBridge)
         },
         false
@@ -32,13 +32,13 @@ export function setupWebViewJavascriptBridge(callback) {
     WVJBIframe.style.display = 'none'
     WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__'
     document.documentElement.appendChild(WVJBIframe)
-    setTimeout(function() {
+    setTimeout(function () {
       document.documentElement.removeChild(WVJBIframe)
     }, 0)
   }
 }
 // js调用原生方法
-export function appInvoked(name, params, cb, errcb) {
+export function appInvoked (name, params, cb, errcb) {
   if (typeof params === 'object') {
     params = JSON.stringify(params)
   } else {
@@ -52,7 +52,7 @@ export function appInvoked(name, params, cb, errcb) {
     }
   }
   if (window.WebViewJavascriptBridge && window.WebViewJavascriptBridge.callHandler) {
-    window.WebViewJavascriptBridge.callHandler(name, params, function(res) {
+    window.WebViewJavascriptBridge.callHandler(name, params, function (res) {
       try {
         res = JSON.parse(res)
       } catch (e) {
@@ -67,7 +67,7 @@ export function appInvoked(name, params, cb, errcb) {
     })
   } else if (isIos || isAndroid) {
     // 如果首次调用时候webviewbridge未能初始化成功，需要主动再初始化一下
-    setupWebViewJavascriptBridge(function() {
+    setupWebViewJavascriptBridge(function () {
       appInvoked(name, params, cb, errcb)
     })
   } else {
@@ -79,12 +79,12 @@ export function appInvoked(name, params, cb, errcb) {
 }
 
 // 接受原生方法
-export function appGetInvoked(name, cb) {
-  if (window.WebViewJavascriptBridge && window.WebViewJavascriptBridge.callHandler) {
+export function appGetInvoked (name, cb) {
+  if (window.WebViewJavascriptBridge && window.WebViewJavascriptBridge.registerHandler) {
     window.WebViewJavascriptBridge.registerHandler(name, cb)
   } else if (isIos || isAndroid) {
     // 如果首次调用时候webviewbridge未能初始化成功，需要主动再初始化一下
-    setupWebViewJavascriptBridge(function(bridge) {
+    setupWebViewJavascriptBridge(function (bridge) {
       bridge.registerHandler(name, cb)
     })
   } else {
@@ -92,7 +92,7 @@ export function appGetInvoked(name, cb) {
   }
 }
 
-export function needRefreshData(lasttime) {
+export function needRefreshData (lasttime) {
   if (!lasttime || lasttime === '') {
     return false
   }

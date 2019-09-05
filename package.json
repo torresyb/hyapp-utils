@@ -1,10 +1,11 @@
 {
   "name": "hyapp-utils",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "'hyapp utils'",
-  "main": "index.js",
+  "main": "dist/hyapp-utils.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.js --progress --colors",
+    "build:dev": "cross-env NODE_ENV=development webpack --config ./webpack.config.js --watch --progress --colors"
   },
   "repository": {
     "type": "git",
@@ -20,20 +21,30 @@
   },
   "homepage": "https://github.com/torresyb/hyapp-utils#readme",
   "devDependencies": {
-    "axios": "^0.18.0",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "eslint": "^5.8.0",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-friendly-formatter": "^4.0.1",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "eslint-plugin-vue": "^4.5.0",
-    "lodash": "^4.17.10"
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/runtime": "^7.5.5",
+    "@babel/runtime-corejs2": "^7.5.5",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.0",
+    "babel-plugin-import": "^1.6.3",
+    "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^5.2.0",
+    "terser-webpack-plugin": "^1.4.1",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
+  },
+  "dependencies": {
+    "core-js": "^2.6.9"
   }
 }
