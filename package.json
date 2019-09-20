@@ -1,6 +1,6 @@
 {
   "name": "hyapp-utils",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "'hyapp utils'",
   "main": "dist/hyapp-utils.js",
   "scripts": {
