@@ -20,7 +20,7 @@ let formatError = errObj => {
     let stackRow = null
     let posStack = urlFirstStack.match(/:(\d+):(\d+)/)
     if (posStack && posStack.length >= 3) {
-      ;[, stackCol, stackRow] = posStack
+      [, stackCol, stackRow] = posStack
     }
 
     return {
@@ -62,7 +62,9 @@ let ErrorCatch = {
         cb(errorInfo)
         _originOnerror && _originOnerror.apply(window, arg)
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

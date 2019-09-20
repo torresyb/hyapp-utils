@@ -36,7 +36,9 @@ let ErrorResource = {
         },
         true
       )
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

@@ -9,6 +9,7 @@ let XhrHook = {
     xhr.webMonitorFlag = true
 
     let _originOpen = xhr.prototype.open
+    // eslint-disable-next-line no-unused-vars
     xhr.prototype.open = function(method, url, async, user, password) {
       this._monitor_xhr_info = {
         url: url,
@@ -28,7 +29,7 @@ let XhrHook = {
           let responseSize = null
           switch (_self.responseType) {
             case 'json':
-              responseSize = JSON && JSON.stringify(_this.response).length
+              responseSize = JSON && JSON.stringify(_self.response).length
               break
             case 'blob':
             case 'moz-blob':
@@ -36,6 +37,7 @@ let XhrHook = {
               break
             case 'arraybuffer':
               responseSize = _self.response.byteLength
+              break
             case 'document':
               responseSize = _self.response.documentElement && _self.response.documentElement.innerHTML && _self.response.documentElement.innerHTML.length + 28
               break
@@ -65,7 +67,7 @@ let XhrHook = {
         this.addEventListener('abort', ajaxEnd('abort'), false)
       } else {
         let _origin_onreadystatechange = this.onreadystatechange
-        this.onreadystatechange = function(event) {
+        this.onreadystatechange = function() {
           if (_origin_onreadystatechange) {
             _originOpen.apply(this, arguments)
           }
