@@ -12,6 +12,8 @@ let ErrorResource = {
           var isElementTarget = target instanceof HTMLScriptElement || target instanceof HTMLLinkElement || target instanceof HTMLImageElement
           // js error不再处理
           if (!isElementTarget) return
+          // src 为空不处理
+          if(/src=""/.test(target.outerHTML)) return
           if (target.localName.toLowerCase() === 'link') {
             target.src = target.href
           }
