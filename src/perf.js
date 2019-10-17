@@ -1,7 +1,51 @@
 let perf = {
   init: cb => {
-    let cycleFreq = 100 // 循环轮询的时间
     let performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance
+    // 上传数据
+    let list = {
+      url: '',
+      attribute: {},
+      apiList: [],
+      resource: {
+        cssList: [],
+        imageList: [],
+        jsList: []
+      }
+    }
+
+    function extension (str) {
+      return str.substring(str.lastIndexOf('.') + 1);
+    }
+
+    // 资源数据格式化
+    function formData (v) {
+      v.forEach(item => {
+        if (Array.isArray(item)) {
+          return formData(item)
+        }
+        if (extension(item.name) == 'js') {
+          list.resource.jsList.push({
+            url: item.name,
+            consume: parseInt(item.duration),
+          })
+        } else if (extension(item.name) == 'png' || extension(item.name) == 'jpg' || extension(item.name) == 'gif' || extension(item.name) == 'jpeg' || extension(item.name) == 'webp') {
+          list.resource.imageList.push({
+            url: item.name,
+            consume: parseInt(item.duration),
+          })
+        } else if (extension(item.name) == 'css') {
+          list.resource.cssList.push({
+            url: item.name,
+            consume: parseInt(item.duration),
+          })
+        } else if (item.initiatorType == 'xmlhttprequest') {
+          list.apiList.push({
+            url: item.name,
+            consume: parseInt(item.duration),
+          })
+        }
+      })
+    }
 
     let Util = {
       addEventListener: function (name, callback, useCapture) {
@@ -32,7 +76,7 @@ let perf = {
             clearTimeout(timer)
             callback()
           } else {
-            timer = setTimeout(runCheck, cycleFreq)
+            timer = setTimeout(runCheck, 100)
           }
         }
       },
@@ -55,39 +99,71 @@ let perf = {
 
       let timing = performance.timing
 
-      let perfData = {
-        route: location.href,
-        // 网络建连
-        pervPage: filterTime(timing.fetchStart, timing.navigationStart), // 上一个页面到本页面时间
-        redirect: filterTime(timing.redirectEnd, timing.redirectStart), // 页面重定向时间
-        dns: filterTime(timing.domainLookupEnd, timing.domainLookupStart), // DNS查找时间
-        tcp: filterTime(timing.connectEnd, timing.connectStart), // TCP建连时间
-        network: filterTime(timing.connectEnd, timing.navigationStart), // 网络建连总耗时
-
-        // 网络接收
-        send: filterTime(timing.responseStart, timing.requestStart), // 前端从发送到接收到后端第一个返回
-        receive: filterTime(timing.responseEnd, timing.responseStart), // 接受页面时间
-        request: filterTime(timing.responseEnd, timing.requestStart), // 请求到完全接受页面总时间
-
+      list.attribute = {
+        navigation: performance.navigation.type, // 导航类型
         // 前端渲染
-        dom: filterTime(timing.domInteractive, timing.domLoading), // dom解析时间(不包含dom内嵌资源加载时间)
-        loadEvent: filterTime(timing.loadEventEnd, timing.loadEventStart), // loadEvent时间
-        frontend: filterTime(timing.loadEventEnd, timing.domLoading), // 前端总时间
-
+        parseDomConsume: filterTime(timing.domInteractive, timing.domLoading), // dom解析时间(不包含dom内嵌资源加载时间)
         // 关键阶段
-        load: filterTime(timing.loadEventEnd, timing.navigationStart), // 页面完全加载总时间
-        domReady: filterTime(timing.domComplete, timing.domInteractive), // dom加载时间(不包含dom解析时间)
-        interactive: filterTime(timing.domContentLoadedEventEnd, timing.navigationStart), // 可操作的时间(可触发点击事件等等)
-        ttfb: filterTime(timing.responseStart, timing.navigationStart), // 白屏时间(从页面进来到读取页面第一个字节的耗时)
+        htmlLoadConsume: filterTime(timing.loadEventEnd, timing.navigationStart), // 页面完全加载总时间
+        domLoadConsume: filterTime(timing.domComplete, timing.domInteractive), // dom加载时间(不包含dom解析时间)
+        whiteScreen: filterTime(timing.responseStart, timing.navigationStart), // 白屏时间(从页面进来到读取页面第一个字节的耗时)
       }
 
-      return perfData
+      // 资源加载耗时
+      if (performance.getEntries) {
+        let entries = performance.getEntriesByType('resource')
+        formData(entries)
+      }
+      return list
     }
 
     Util.onload(function () {
       let perfData = reportPerf('onload')
-      perfData.type = 'onload'
+      perfData.url = `[onload] ${location.href}`
       cb(perfData)
+      list = {
+        attribute: {},
+        apiList: [],
+        resource: {
+          cssList: [],
+          imageList: [],
+          jsList: []
+        }
+      }
+      if (window.PerformanceObserver) {
+        let timer = null
+        let entriesData = []
+        function runCheck () {
+          clearInterval(timer)
+          timer = setTimeout(() => {
+            formData(entriesData)
+            list.url = `[observer] ${location.href}`
+            cb(list)
+            list = {
+              attribute: {},
+              apiList: [],
+              resource: {
+                cssList: [],
+                imageList: [],
+                jsList: []
+              }
+            }
+            entriesData = []
+          }, 1000)
+        }
+        let observer = new window.PerformanceObserver(list => {
+          try {
+            let entries = list.getEntries()
+            entriesData.push(entries)
+            runCheck()
+          } catch (e) {
+            console.error(e)
+          }
+        })
+        observer.observe({
+          entryTypes: ['resource'],
+        })
+      }
     })
   },
 }

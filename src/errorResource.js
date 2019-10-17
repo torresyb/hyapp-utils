@@ -13,7 +13,7 @@ let ErrorResource = {
           // js error不再处理
           if (!isElementTarget) return
           // src 为空不处理
-          if(/src=""/.test(target.outerHTML)) return
+          if (/src=""/.test(target.outerHTML)) return
           if (target.localName.toLowerCase() === 'link') {
             target.src = target.href
           }
@@ -22,15 +22,8 @@ let ErrorResource = {
             message: '资源加载失败',
             type: `resource_${event.type}`,
             url: target.src, // 加载失败的url
-            route: location.href, // 当前页面
+            page: location.href, // 当前页面
             outerHTML: target.outerHTML, // 引入源码
-            userAgent: navigator.userAgent
-          }
-          if (navigator.connection) {
-            const { rtt, downlink, effectiveType } = navigator.connection
-            errorInfo.rtt = `有效网络连接类型${effectiveType}`
-            errorInfo.downlink = `估算的下行速度/带宽${downlink}Mb/s`
-            errorInfo.effectiveType = `估算的往返时间${rtt}ms`
           }
           cb(errorInfo)
         },

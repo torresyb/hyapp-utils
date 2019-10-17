@@ -24,7 +24,7 @@ let formatError = errObj => {
     }
 
     return {
-      content: stack,
+      stack: stack,
       col: Number(col || stackCol),
       row: Number(row || stackRow),
       message,
@@ -54,8 +54,7 @@ let ErrorCatch = {
         errorInfo._scriptURI = scriptURI // 发生错误的url地址
         errorInfo._lineNumber = lineNumber // 发生错误的行
         errorInfo._columnNumber = columnNumber // 发生错误的列
-        errorInfo._route = location.href // 当前页面
-        errorInfo.userAgent = navigator.userAgent
+        errorInfo.page = location.href // 当前页面
         errorInfo.type = 'js_onerror'
 
         // 数据回调
