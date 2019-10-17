@@ -48,7 +48,11 @@ let perf = {
         return parseInt(a > 0 && b > 0 && a - b >= 0 ? a - b : -1)
       }
 
-      // append data from window.performance
+      /**
+       * 各个参数的含义
+       * http://javascript.ruanyifeng.com/bom/performance.html
+       */
+
       let timing = performance.timing
 
       let perfData = {
@@ -66,15 +70,15 @@ let perf = {
         request: filterTime(timing.responseEnd, timing.requestStart), // 请求到完全接受页面总时间
 
         // 前端渲染
-        dom: filterTime(timing.domComplete, timing.domLoading), // dom解析时间
+        dom: filterTime(timing.domInteractive, timing.domLoading), // dom解析时间(不包含dom内嵌资源加载时间)
         loadEvent: filterTime(timing.loadEventEnd, timing.loadEventStart), // loadEvent时间
         frontend: filterTime(timing.loadEventEnd, timing.domLoading), // 前端总时间
 
         // 关键阶段
         load: filterTime(timing.loadEventEnd, timing.navigationStart), // 页面完全加载总时间
-        domReady: filterTime(timing.domContentLoadedEventStart, timing.navigationStart), // dom加载时间
-        interactive: filterTime(timing.domInteractive, timing.navigationStart), // 可操作时间
-        ttfb: filterTime(timing.responseStart, timing.navigationStart), // 白屏时间
+        domReady: filterTime(timing.domComplete, timing.domInteractive), // dom加载时间(不包含dom解析时间)
+        interactive: filterTime(timing.domContentLoadedEventEnd, timing.navigationStart), // 可操作的时间(可触发点击事件等等)
+        ttfb: filterTime(timing.responseStart, timing.navigationStart), // 白屏时间(从页面进来到读取页面第一个字节的耗时)
       }
 
       return perfData

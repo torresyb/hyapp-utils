@@ -18,8 +18,6 @@ let resolvePerformanceTiming = timing => {
     send: filterTime(timing.responseStart, timing.requestStart), // 前端从发送到接收到后端第一个返回
     receive: filterTime(timing.responseEnd, timing.responseStart), // 接收资源总时间
     request: filterTime(timing.responseEnd, timing.requestStart), // 请求到完全接受资源总时间
-
-    ttfb: filterTime(timing.responseStart, timing.requestStart), // 首字节时间
   }
 
   return o
